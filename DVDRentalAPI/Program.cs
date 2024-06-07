@@ -25,7 +25,7 @@ app.MapGet("/", () => "Hello World");
 
 app.MapPost("/login", (LoginDTO loginDTO) =>
 {
-    if (loginDTO.Email == "adm@test.com" && loginDTO.Password == "123456")
+    if (loginDTO.Email == "admin@test.com" && loginDTO.Password == "123456")
     {
         return Results.Ok("Logged");
     }
