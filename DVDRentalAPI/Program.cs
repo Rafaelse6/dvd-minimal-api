@@ -1,4 +1,5 @@
 using DVDRentalAPI.Data;
+using DVDRentalAPI.Domain.Entities;
 using DVDRentalAPI.Domain.Entities.DTO;
 using DVDRentalAPI.Domain.Interfaces;
 using DVDRentalAPI.Domain.ModelViews;
@@ -14,6 +15,7 @@ builder.Services.AddDbContext<SQLContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddScoped<IAdminService, AdminService>();
+builder.Services.AddScoped<IDVDService, DVDService>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -45,6 +47,26 @@ app.MapPost("/login", ([FromBody] LoginDTO loginDTO, IAdminService adminService)
         return Results.Unauthorized();
     }
 });
+#endregion
+
+#region DVD
+app.MapPost("/dvds", ([FromBody] DVDDTO dvdDTO, IDVDService dvdService) =>
+{
+
+    var dvd = new DVD
+    {
+        Title = dvdDTO.Title,
+        Genre = dvdDTO.Genre,
+        Duration = dvdDTO.Duration,
+        Year = dvdDTO.Year,
+        ReleaseDate = dvdDTO.ReleaseDate,
+    };
+
+    dvdService.Create(dvd);
+    return Results.Created("$/dvd/{dvd.Id}", dvd);
+
+});
+
 #endregion
 
 app.Run();
