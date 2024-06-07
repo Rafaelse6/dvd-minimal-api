@@ -1,6 +1,12 @@
+using DVDRentalAPI.Data;
+using DVDRentalAPI.Entities;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddDbContext<DataContext>(options =>
+options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -31,8 +37,3 @@ app.MapPost("/login", (LoginDTO loginDTO) =>
 
 app.Run();
 
-public class LoginDTO
-{
-    public string Email { get; set; } = default!;
-    public string Password { get; set; } = default!;
-}
