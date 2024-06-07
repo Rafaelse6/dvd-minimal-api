@@ -14,7 +14,7 @@ namespace DVDRentalAPI.Services
             _context = context;
         }
 
-        public List<DVD> GetAllDVDs(int page = 1, string? title = null, string? genre = null, int? duration = null, int? year = null, DateTime? releaseDate = null)
+        public List<DVD> GetAllDVDs(int? page = 1, string? title = null, string? genre = null, int? duration = null, int? year = null, DateTime? releaseDate = null)
         {
             var query = _context.Dvds.AsQueryable();
             if (!string.IsNullOrEmpty(title))
@@ -24,7 +24,8 @@ namespace DVDRentalAPI.Services
 
             int itensPerPage = 10;
 
-            query = query.Skip((page - 1) * itensPerPage).Take(itensPerPage);
+            if (page != null)
+                query = query.Skip((int)(page - 1) * itensPerPage).Take(itensPerPage);
 
             return [.. query];
         }

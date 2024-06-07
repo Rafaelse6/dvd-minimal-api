@@ -32,7 +32,7 @@ if (app.Environment.IsDevelopment())
 #endregion
 
 #region Home
-app.MapGet("/", () => Results.Json(new Home()));
+app.MapGet("/", () => Results.Json(new Home())).WithTags("Home");
 #endregion
 
 #region Admins
@@ -46,7 +46,7 @@ app.MapPost("/login", ([FromBody] LoginDTO loginDTO, IAdminService adminService)
     {
         return Results.Unauthorized();
     }
-});
+}).WithTags("Admins");
 #endregion
 
 #region DVD
@@ -65,7 +65,14 @@ app.MapPost("/dvds", ([FromBody] DVDDTO dvdDTO, IDVDService dvdService) =>
     dvdService.Create(dvd);
     return Results.Created("$/dvd/{dvd.Id}", dvd);
 
-});
+}).WithTags("DVDS");
+
+app.MapGet("/dvds", ([FromQuery] int? page, IDVDService dvdService) =>
+{
+    var dvds = dvdService.GetAllDVDs(page);
+
+    return Results.Ok(dvds);
+}).WithTags("DVDS");
 
 #endregion
 

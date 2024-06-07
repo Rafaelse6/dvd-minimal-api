@@ -4,7 +4,7 @@ namespace DVDRentalAPI.Domain.Interfaces
 {
     public interface IDVDService
     {
-        List<DVD> GetAllDVDs(int page = 1, string? title = null, 
+        List<DVD> GetAllDVDs(int? page = 1, string? title = null, 
                             string? genre = null, int? duration = null, 
                             int? year = null, DateTime? releaseDate = null);
 
