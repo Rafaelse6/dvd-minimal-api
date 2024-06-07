@@ -6,6 +6,7 @@ using DVDRentalAPI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
+#region Builder and Swagger
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -26,9 +27,13 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+#endregion
 
+#region Home
 app.MapGet("/", () => Results.Json(new Home()));
+#endregion
 
+#region Admins
 app.MapPost("/login", ([FromBody] LoginDTO loginDTO, IAdminService adminService) =>
 {
     if (adminService.Login(loginDTO) != null)
@@ -40,5 +45,6 @@ app.MapPost("/login", ([FromBody] LoginDTO loginDTO, IAdminService adminService)
         return Results.Unauthorized();
     }
 });
+#endregion
 
 app.Run();
