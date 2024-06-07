@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace DVDRentalAPI.Entities
+namespace DVDRentalAPI.Domain.Entities
 {
     public class Admin
     {
@@ -17,7 +17,7 @@ namespace DVDRentalAPI.Entities
         [StringLength(50)]
         public string Password { get; set; } = default!;
 
-        [StringLength (10)]
-        public string Profile { get; set; } = default!; 
+        [StringLength(10)]
+        public string Profile { get; set; } = default!;
     }
 }

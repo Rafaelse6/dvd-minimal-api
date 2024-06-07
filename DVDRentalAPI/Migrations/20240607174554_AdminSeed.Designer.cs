@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DVDRentalAPI.Migrations
 {
-    [DbContext(typeof(DataContext))]
+    [DbContext(typeof(Data.SQLContext))]
     [Migration("20240607174554_AdminSeed")]
     partial class AdminSeed
     {

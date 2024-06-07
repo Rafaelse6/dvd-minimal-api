@@ -1,10 +1,11 @@
-﻿using DVDRentalAPI.Entities;
+﻿using DVDRentalAPI.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace DVDRentalAPI.Data
 {
-    public class DataContext : DbContext
+    public class SQLContext : DbContext
     {
+        public SQLContext(DbContextOptions<SQLContext> options) : base(options) { }
 
         public DbSet<Admin> Admins { get; set; } = default!;
 
@@ -20,7 +21,5 @@ namespace DVDRentalAPI.Data
                 }
             );
         }
-
-        public DataContext(DbContextOptions<DataContext> options) : base(options) { }
     }
 }

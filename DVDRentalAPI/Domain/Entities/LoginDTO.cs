@@ -1,4 +1,4 @@
-﻿namespace DVDRentalAPI.Entities
+﻿namespace DVDRentalAPI.Domain.Entities
 {
     public class LoginDTO
     {

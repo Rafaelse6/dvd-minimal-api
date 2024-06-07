@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DVDRentalAPI.Migrations
 {
-    [DbContext(typeof(DataContext))]
+    [DbContext(typeof(Data.SQLContext))]
     partial class DataContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)

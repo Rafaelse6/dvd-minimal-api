@@ -1,12 +1,18 @@
 using DVDRentalAPI.Data;
-using DVDRentalAPI.Entities;
+using DVDRentalAPI.Domain.Entities;
+using DVDRentalAPI.Domain.Interfaces;
+using DVDRentalAPI.Services;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddDbContext<DataContext>(options =>
-options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddDbContext<SQLContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.AddScoped<IAdminService, AdminService>();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -22,10 +28,9 @@ if (app.Environment.IsDevelopment())
 
 app.MapGet("/", () => "Hello World");
 
-
-app.MapPost("/login", (LoginDTO loginDTO) =>
+app.MapPost("/login", ([FromBody] LoginDTO loginDTO, IAdminService adminService) =>
 {
-    if (loginDTO.Email == "admin@test.com" && loginDTO.Password == "123456")
+    if (adminService.Login(loginDTO) != null)
     {
         return Results.Ok("Logged");
     }
@@ -36,4 +41,3 @@ app.MapPost("/login", (LoginDTO loginDTO) =>
 });
 
 app.Run();
-
