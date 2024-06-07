@@ -9,6 +9,8 @@ namespace DVDRentalAPI.Data
 
         public DbSet<Admin> Admins { get; set; } = default!;
 
+        public DbSet<DVD> Dvds { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Admin>().HasData(
