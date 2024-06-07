@@ -1,6 +1,7 @@
 using DVDRentalAPI.Data;
 using DVDRentalAPI.Domain.Entities;
 using DVDRentalAPI.Domain.Interfaces;
+using DVDRentalAPI.Domain.ModelViews;
 using DVDRentalAPI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -26,7 +27,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.MapGet("/", () => "Hello World");
+app.MapGet("/", () => Results.Json(new Home()));
 
 app.MapPost("/login", ([FromBody] LoginDTO loginDTO, IAdminService adminService) =>
 {
