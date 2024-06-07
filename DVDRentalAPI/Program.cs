@@ -1,5 +1,5 @@
 using DVDRentalAPI.Data;
-using DVDRentalAPI.Domain.Entities;
+using DVDRentalAPI.Domain.Entities.DTO;
 using DVDRentalAPI.Domain.Interfaces;
 using DVDRentalAPI.Domain.ModelViews;
 using DVDRentalAPI.Services;

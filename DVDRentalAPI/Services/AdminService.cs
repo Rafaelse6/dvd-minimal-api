@@ -1,4 +1,5 @@
 ﻿using DVDRentalAPI.Domain.Entities;
+using DVDRentalAPI.Domain.Entities.DTO;
 using DVDRentalAPI.Domain.Interfaces;
 
 namespace DVDRentalAPI.Services
