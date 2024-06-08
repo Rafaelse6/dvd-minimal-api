@@ -98,6 +98,17 @@ app.MapPut("/dvds/{id}", ([FromRoute] int? id, DVDDTO dvdDTO, IDVDService dvdSer
     return Results.Ok(dvd);
 }).WithTags("DVDS");
 
+app.MapDelete("/dvds/{id}", ([FromRoute] int id, IDVDService dvdService) =>
+{
+    var dvd = dvdService.FindById(id);
+
+    if (dvd == null) return Results.NotFound();
+
+    dvdService.Delete(dvd);
+
+    return Results.NoContent();
+}).WithTags("DVDS");
+
 #endregion
 
 app.Run();

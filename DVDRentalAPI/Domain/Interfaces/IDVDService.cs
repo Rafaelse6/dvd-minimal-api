@@ -11,6 +11,6 @@ namespace DVDRentalAPI.Domain.Interfaces
         DVD? FindById(int? id);
         void Create(DVD dvd);
         void Update(DVD dvd);
-        void Delete(int id);
+        void Delete(DVD dvd);
     }
 }

@@ -47,9 +47,9 @@ namespace DVDRentalAPI.Services
             _context.SaveChanges();
         }
 
-        public void Delete(int id)
+        public void Delete(DVD dvd)
         {
-            _context.Remove(id);
+            _context.Remove(dvd);
             _context.SaveChanges();
         }
     }
