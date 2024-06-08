@@ -8,7 +8,7 @@ namespace DVDRentalAPI.Domain.Interfaces
                             string? genre = null, int? duration = null, 
                             int? year = null, DateTime? releaseDate = null);
 
-        DVD? FindById(int id);
+        DVD? FindById(int? id);
         void Create(DVD dvd);
         void Update(DVD dvd);
         void Delete(int id);

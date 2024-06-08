@@ -74,6 +74,15 @@ app.MapGet("/dvds", ([FromQuery] int? page, IDVDService dvdService) =>
     return Results.Ok(dvds);
 }).WithTags("DVDS");
 
+app.MapGet("/dvds/{id}", ([FromRoute] int? id, IDVDService dvdService) =>
+{
+    var dvd = dvdService.FindById(id);
+
+    if(dvd == null) return Results.NotFound();  
+
+    return Results.Ok(dvd);
+}).WithTags("DVDS");
+
 #endregion
 
 app.Run();

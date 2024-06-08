@@ -30,7 +30,7 @@ namespace DVDRentalAPI.Services
             return [.. query];
         }
 
-        public DVD? FindById(int id)
+        public DVD? FindById(int? id)
         {
             return _context.Dvds.Where(v => v.Id == id).FirstOrDefault();
         }
