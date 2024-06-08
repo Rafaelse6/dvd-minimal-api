@@ -50,8 +50,43 @@ app.MapPost("/login", ([FromBody] LoginDTO loginDTO, IAdminService adminService)
 #endregion
 
 #region DVD
+
+ErrorsHandling validateDTO(DVDDTO dvdDTO)
+{
+    var validation = new ErrorsHandling
+    {
+        Messages = new List<String>()
+    };
+
+    if (string.IsNullOrEmpty(dvdDTO.Title))
+    {
+        validation.Messages.Add("Title can not be empty");
+    }
+
+    if (string.IsNullOrEmpty(dvdDTO.Genre))
+    {
+        validation.Messages.Add("Genre can not be empty");
+    }
+
+    if (int.IsNegative(dvdDTO.Year) || dvdDTO.Year == 0)
+    {
+        validation.Messages.Add("Year can not be either negative or zero");
+    }
+
+    if (int.IsNegative(dvdDTO.Duration) || dvdDTO.Duration == 0)
+    {
+        validation.Messages.Add("Duration can not be either negative or zero");
+    }
+
+    return validation;
+}
+
 app.MapPost("/dvds", ([FromBody] DVDDTO dvdDTO, IDVDService dvdService) =>
 {
+    var validation = validateDTO(dvdDTO);
+
+    if (validation.Messages.Count > 0)
+        return Results.BadRequest(validation);
 
     var dvd = new DVD
     {
@@ -84,6 +119,11 @@ app.MapGet("/dvds/{id}", ([FromRoute] int? id, IDVDService dvdService) =>
 
 app.MapPut("/dvds/{id}", ([FromRoute] int? id, DVDDTO dvdDTO, IDVDService dvdService) =>
 {
+    var validation = validateDTO(dvdDTO);
+
+    if (validation.Messages.Count > 0)
+        return Results.BadRequest(validation);
+
     var dvd = dvdService.FindById(id);
 
     if (dvd == null) return Results.NotFound();
