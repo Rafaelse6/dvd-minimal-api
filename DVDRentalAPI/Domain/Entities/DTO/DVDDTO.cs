@@ -6,6 +6,5 @@
         public string Genre { get; set; } = default!;
         public int Duration { get; set; } = default!;
         public int Year { get; set; } = default!;
-        public DateTime ReleaseDate { get; set; } = default!;
     }
 }

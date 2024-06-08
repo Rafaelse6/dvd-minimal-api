@@ -19,7 +19,5 @@ namespace DVDRentalAPI.Domain.Entities
         public int Duration { get; set; } = default!;
 
         public int Year { get; set; } = default!;
-
-        public DateTime ReleaseDate { get; set; } = default!;
     }
 }

@@ -14,7 +14,7 @@ namespace DVDRentalAPI.Services
             _context = context;
         }
 
-        public List<DVD> GetAllDVDs(int? page = 1, string? title = null, string? genre = null, int? duration = null, int? year = null, DateTime? releaseDate = null)
+        public List<DVD> GetAllDVDs(int? page = 1, string? title = null, string? genre = null, int? duration = null, int? year = null)
         {
             var query = _context.Dvds.AsQueryable();
             if (!string.IsNullOrEmpty(title))

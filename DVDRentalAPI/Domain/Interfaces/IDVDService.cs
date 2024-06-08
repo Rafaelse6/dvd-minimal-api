@@ -6,7 +6,7 @@ namespace DVDRentalAPI.Domain.Interfaces
     {
         List<DVD> GetAllDVDs(int? page = 1, string? title = null, 
                             string? genre = null, int? duration = null, 
-                            int? year = null, DateTime? releaseDate = null);
+                            int? year = null);
 
         DVD? FindById(int? id);
         void Create(DVD dvd);

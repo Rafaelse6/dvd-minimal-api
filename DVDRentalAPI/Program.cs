@@ -59,7 +59,6 @@ app.MapPost("/dvds", ([FromBody] DVDDTO dvdDTO, IDVDService dvdService) =>
         Genre = dvdDTO.Genre,
         Duration = dvdDTO.Duration,
         Year = dvdDTO.Year,
-        ReleaseDate = dvdDTO.ReleaseDate,
     };
 
     dvdService.Create(dvd);
@@ -93,7 +92,6 @@ app.MapPut("/dvds/{id}", ([FromRoute] int? id, DVDDTO dvdDTO, IDVDService dvdSer
     dvd.Genre = dvdDTO.Genre;
     dvd.Duration = dvdDTO.Duration;
     dvd.Year = dvdDTO.Year;
-    dvd.ReleaseDate = dvdDTO.ReleaseDate;
 
     return Results.Ok(dvd);
 }).WithTags("DVDS");
