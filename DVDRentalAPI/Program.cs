@@ -78,7 +78,22 @@ app.MapGet("/dvds/{id}", ([FromRoute] int? id, IDVDService dvdService) =>
 {
     var dvd = dvdService.FindById(id);
 
-    if(dvd == null) return Results.NotFound();  
+    if (dvd == null) return Results.NotFound();
+
+    return Results.Ok(dvd);
+}).WithTags("DVDS");
+
+app.MapPut("/dvds/{id}", ([FromRoute] int? id, DVDDTO dvdDTO, IDVDService dvdService) =>
+{
+    var dvd = dvdService.FindById(id);
+
+    if (dvd == null) return Results.NotFound();
+
+    dvd.Title = dvdDTO.Title;
+    dvd.Genre = dvdDTO.Genre;
+    dvd.Duration = dvdDTO.Duration;
+    dvd.Year = dvdDTO.Year;
+    dvd.ReleaseDate = dvdDTO.ReleaseDate;
 
     return Results.Ok(dvd);
 }).WithTags("DVDS");
