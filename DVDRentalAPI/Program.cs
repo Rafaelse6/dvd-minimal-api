@@ -5,8 +5,11 @@ using DVDRentalAPI.Domain.Enums;
 using DVDRentalAPI.Domain.Interfaces;
 using DVDRentalAPI.Domain.ModelViews;
 using DVDRentalAPI.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 #region Builder and Swagger
 var builder = WebApplication.CreateBuilder(args);
@@ -14,6 +17,24 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddDbContext<SQLContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+var key = builder.Configuration.GetSection("Jwt").ToString();
+if (string.IsNullOrEmpty(key)) key = "123456";
+
+builder.Services.AddAuthentication(option =>
+{
+    option.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    option.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+}).AddJwtBearer(option =>
+{
+    option.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateLifetime = true,
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key))
+    };
+});
+
+builder.Services.AddAuthorization();
 
 builder.Services.AddScoped<IAdminService, AdminService>();
 builder.Services.AddScoped<IDVDService, DVDService>();
@@ -51,7 +72,7 @@ app.MapGet("/admins", ([FromQuery] int? page, IAdminService adminService) =>
         });
     }
     return Results.Ok(adms);
-}).WithTags("Admins");
+}).RequireAuthorization().WithTags("Admins");
 
 app.MapGet("/admins/{id}", ([FromRoute] int id, IAdminService adminService) =>
 {
@@ -63,7 +84,7 @@ app.MapGet("/admins/{id}", ([FromRoute] int id, IAdminService adminService) =>
         Email = adm.Email,
         Profile = adm.Profile
     });
-}).WithTags("Admins");
+}).RequireAuthorization().WithTags("Admins");
 
 app.MapPost("/admins", ([FromBody] AdminDTO adminDTO, IAdminService adminService) =>
 {
@@ -92,7 +113,7 @@ app.MapPost("/admins", ([FromBody] AdminDTO adminDTO, IAdminService adminService
         Email = admin.Email,
         Profile = admin.Profile
     });
-}).WithTags("Admins");
+}).RequireAuthorization().WithTags("Admins");
 
 app.MapPost("/login", ([FromBody] LoginDTO loginDTO, IAdminService adminService) =>
 {
@@ -157,7 +178,7 @@ app.MapPost("/dvds", ([FromBody] DVDDTO dvdDTO, IDVDService dvdService) =>
     dvdService.Create(dvd);
     return Results.Created("$/dvd/{dvd.Id}", dvd);
 
-}).WithTags("DVDS");
+}).RequireAuthorization().WithTags("DVDS");
 
 app.MapGet("/dvds", ([FromQuery] int? page, IDVDService dvdService) =>
 {
@@ -192,7 +213,7 @@ app.MapPut("/dvds/{id}", ([FromRoute] int? id, DVDDTO dvdDTO, IDVDService dvdSer
     dvd.Year = dvdDTO.Year;
 
     return Results.Ok(dvd);
-}).WithTags("DVDS");
+}).RequireAuthorization().WithTags("DVDS");
 
 app.MapDelete("/dvds/{id}", ([FromRoute] int id, IDVDService dvdService) =>
 {
@@ -203,8 +224,11 @@ app.MapDelete("/dvds/{id}", ([FromRoute] int id, IDVDService dvdService) =>
     dvdService.Delete(dvd);
 
     return Results.NoContent();
-}).WithTags("DVDS");
+}).RequireAuthorization().WithTags("DVDS");
 
 #endregion
+
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.Run();
