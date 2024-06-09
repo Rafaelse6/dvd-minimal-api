@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.10.34928.147
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DVDRentalAPI", "DVDRentalAPI\DVDRentalAPI.csproj", "{F9E5207C-457D-42C8-B7CF-A8393CFFC6BD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DVDRentalAPI", "DVDRentalAPI\DVDRentalAPI.csproj", "{F9E5207C-457D-42C8-B7CF-A8393CFFC6BD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestProject", "TestProject\TestProject.csproj", "{AA29E8CD-2C52-42FD-921B-94CA76C5A0AA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{F9E5207C-457D-42C8-B7CF-A8393CFFC6BD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F9E5207C-457D-42C8-B7CF-A8393CFFC6BD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F9E5207C-457D-42C8-B7CF-A8393CFFC6BD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AA29E8CD-2C52-42FD-921B-94CA76C5A0AA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AA29E8CD-2C52-42FD-921B-94CA76C5A0AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AA29E8CD-2C52-42FD-921B-94CA76C5A0AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AA29E8CD-2C52-42FD-921B-94CA76C5A0AA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
