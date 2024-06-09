@@ -6,10 +6,13 @@ using DVDRentalAPI.Domain.Interfaces;
 using DVDRentalAPI.Domain.ModelViews;
 using DVDRentalAPI.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using System.Text;
 
 #region Builder and Swagger
@@ -85,6 +88,31 @@ app.MapGet("/", () => Results.Json(new Home())).WithTags("Home").AllowAnonymous(
 #endregion
 
 #region Admins
+
+string GenerateJwtToken(Admin admin)
+{
+    if (string.IsNullOrEmpty(key)) return string.Empty;
+
+    var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));
+    var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
+
+    var claims = new List<Claim>()
+    {
+        new Claim("Email", admin.Email),
+        new Claim("Profile", admin.Profile),
+        new Claim(ClaimTypes.Role, admin.Profile)
+    };
+
+    var token = new JwtSecurityToken(
+        claims: claims,
+        expires: DateTime.Now.AddDays(1),
+        signingCredentials: credentials
+    );
+
+    return new JwtSecurityTokenHandler().WriteToken(token);
+}
+
+
 app.MapGet("/admins", ([FromQuery] int? page, IAdminService adminService) =>
 {
     var adms = new List<AdminModelView>();
@@ -99,7 +127,7 @@ app.MapGet("/admins", ([FromQuery] int? page, IAdminService adminService) =>
         });
     }
     return Results.Ok(adms);
-}).RequireAuthorization().WithTags("Admins");
+}).RequireAuthorization().RequireAuthorization(new AuthorizeAttribute { Roles = "Adm" }).WithTags("Admins");
 
 app.MapGet("/admins/{id}", ([FromRoute] int id, IAdminService adminService) =>
 {
@@ -111,7 +139,7 @@ app.MapGet("/admins/{id}", ([FromRoute] int id, IAdminService adminService) =>
         Email = adm.Email,
         Profile = adm.Profile
     });
-}).RequireAuthorization().WithTags("Admins");
+}).RequireAuthorization().RequireAuthorization(new AuthorizeAttribute { Roles = "Adm" }).WithTags("Admins");
 
 app.MapPost("/admins", ([FromBody] AdminDTO adminDTO, IAdminService adminService) =>
 {
@@ -140,18 +168,24 @@ app.MapPost("/admins", ([FromBody] AdminDTO adminDTO, IAdminService adminService
         Email = admin.Email,
         Profile = admin.Profile
     });
-}).RequireAuthorization().WithTags("Admins");
+}).RequireAuthorization().RequireAuthorization(new AuthorizeAttribute { Roles = "Adm" }).WithTags("Admins");
 
 app.MapPost("/login", ([FromBody] LoginDTO loginDTO, IAdminService adminService) =>
 {
+    var adm = adminService.Login(loginDTO);
+
     if (adminService.Login(loginDTO) != null)
     {
-        return Results.Ok("Logged");
+        string token = GenerateJwtToken(adm);
+        return Results.Ok(new AdmLogged
+        {
+            Email = adm.Email,
+            Profile = adm.Profile,
+            Token = token
+        });
     }
     else
-    {
         return Results.Unauthorized();
-    }
 }).AllowAnonymous().WithTags("Admins");
 #endregion
 
@@ -205,7 +239,7 @@ app.MapPost("/dvds", ([FromBody] DVDDTO dvdDTO, IDVDService dvdService) =>
     dvdService.Create(dvd);
     return Results.Created("$/dvd/{dvd.Id}", dvd);
 
-}).RequireAuthorization().WithTags("DVDS");
+}).RequireAuthorization().RequireAuthorization(new AuthorizeAttribute { Roles = "Adm" }).WithTags("DVDS");
 
 app.MapGet("/dvds", ([FromQuery] int? page, IDVDService dvdService) =>
 {
@@ -240,7 +274,7 @@ app.MapPut("/dvds/{id}", ([FromRoute] int? id, DVDDTO dvdDTO, IDVDService dvdSer
     dvd.Year = dvdDTO.Year;
 
     return Results.Ok(dvd);
-}).RequireAuthorization().WithTags("DVDS");
+}).RequireAuthorization().RequireAuthorization(new AuthorizeAttribute { Roles = "Adm" }).WithTags("DVDS");
 
 app.MapDelete("/dvds/{id}", ([FromRoute] int id, IDVDService dvdService) =>
 {
@@ -251,7 +285,7 @@ app.MapDelete("/dvds/{id}", ([FromRoute] int id, IDVDService dvdService) =>
     dvdService.Delete(dvd);
 
     return Results.NoContent();
-}).RequireAuthorization().WithTags("DVDS");
+}).RequireAuthorization().RequireAuthorization(new AuthorizeAttribute { Roles = "Adm" }).WithTags("DVDS");
 
 #endregion
 
