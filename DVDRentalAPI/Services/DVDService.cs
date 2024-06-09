@@ -43,8 +43,12 @@ namespace DVDRentalAPI.Services
 
         public void Update(DVD dvd)
         {
-            _context.Dvds.Update(dvd);
-            _context.SaveChanges();
+            var existingDVD = _context.Dvds.Find(dvd.Id);
+            if (existingDVD != null)
+            {
+                _context.Entry(existingDVD).CurrentValues.SetValues(dvd);
+                _context.SaveChanges();
+            }
         }
 
         public void Delete(DVD dvd)

@@ -1,6 +1,6 @@
 using DVDRentalAPI.Domain.Entities;
 
-namespace TestProject
+namespace TestProject.Entities
 {
     [TestClass]
     public class AdminTest
