@@ -17,7 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DVDRentalAPI\DVDRentalAPI.csproj" />
+    <ProjectReference Include="..\DVDRentalAPI\DVDAPI.csproj" />
   </ItemGroup>
 
   <ItemGroup>
